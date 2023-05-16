@@ -9,10 +9,12 @@ COPY --from=py3 / /
 
 ARG PYSPARK_VERSION=3.4.0
 RUN pip --no-cache-dir install pyspark==${PYSPARK_VERSION}
+RUN pip --no-cache-dir install elasticsearch
+
 
 
 # COPY requirements.txt .
 # RUN pip3 install -r requirements.txt
 
 COPY spark.py .
-CMD spark-submit --master local[1] --packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.4.0 spark.py
+CMD spark-submit --master local[1] --packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.4.0 spark.py 

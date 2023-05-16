@@ -22,14 +22,14 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 #   https://developers.google.com/youtube/v3/guides/authentication
 # For more information about the client_secrets.json file format, see:
 #   https://developers.google.com/api-client-library/python/guide/aaa_client_secrets
-CLIENT_SECRETS_FILE = os.getenv('CLIENT')
+CLIENT_SECRETS_FILE = 'client_secret_662717540184-9j4cp6ln4glhmj2aou93c9s5th0iju4a.apps.googleusercontent.com.json'
 
 # This OAuth 2.0 access scope allows for read-only access to the authenticated
 # user's account, but not other types of account access.
 SCOPES = ['https://www.googleapis.com/auth/youtube.readonly']
 API_SERVICE_NAME = 'youtube'
 API_VERSION = 'v3'
-DEVELOPER_KEY = os.getenv('API_KEY')
+DEVELOPER_KEY = "AIzaSyAXeARoQ62y5gSM6gFK4geGNQN2eGP1P7c"
 
 VALID_BROADCAST_STATUSES = ('all', 'active', 'completed', 'upcoming',)
 

@@ -1,0 +1,90 @@
+version: "3.7"
+services:
+  zookeeper:
+    image: youtap:kafka
+    container_name: kafkaZK
+    environment:
+      - KAFKA_ACTION=start-zk
+    networks:
+      youtap:
+        ipv4_address: 10.0.100.22
+  kafkaserver:
+    image: youtap:kafka
+    container_name: kafkaServer
+    environment:
+      - KAFKA_ACTION=start-kafka
+      #- KAFKA_HEAP_OPTS=-Xmx256M
+    ports:
+      - 9092:9092
+    networks:
+      youtap:
+        ipv4_address: 10.0.100.23
+    depends_on:
+      - zookeeper
+  kafkaTopic:
+    image: youtap:kafka
+    container_name: kafkaTopic
+    environment:
+      - KAFKA_ACTION=create-topic
+      - KAFKA_PARTITION=3
+      - KAFKA_TOPIC=youtap
+    networks:
+      youtap:
+    depends_on:
+      - zookeeper
+      - kafkaserver
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    container_name: kafkaWebUI
+    environment:
+      - KAFKA_CLUSTERS_0_NAME=local
+      - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=kafkaServer:9092
+    ports:
+      - 9292:8080
+    networks:
+      - youtap
+    depends_on:
+      - kafkaserver
+  logstash:
+    image: youtap:logstash
+    networks:
+      - youtap
+    environment:
+      XPACK_MONITORING_ENABLED: "false"
+    ports:
+      - 9090:9090
+    volumes:
+      - ./quovado.conf:/usr/share/logstash/pipeline/logstash.conf
+    depends_on:
+      kafkaTopic:
+        condition: service_completed_successfully
+  kafkaConsumer:
+    image: youtap:kafka
+    container_name: kafkaConsumer
+    environment:
+      - KAFKA_ACTION=consumer
+      - KAFKA_TOPIC=youtap
+      - KAFKA_GROUP_ID=youtap
+    networks:
+      youtap:
+    depends_on:
+      kafkaTopic:
+        condition: service_completed_successfully
+  spark:
+    build: ./spark/
+    networks:
+      - youtap
+    container_name: spark
+  elasticSearch:
+    image: docker.elastic.co/kibana/kibana:8.7.1-arm64
+    networks:
+      - youtap
+    container_name: elasticSearch
+networks:
+  youtap:
+    name: youtap
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.0.100.1/24
+#     export KAFKA_HEAP_OPTS="-Xmx1G -Xms1G"

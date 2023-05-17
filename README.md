@@ -17,22 +17,20 @@ you have to download kafka.tgz from the following link: https://www.apache.org/d
 then, you have to save it in setup folder and run the following command:
 
 ```
-docker build kafka/ -t kafka
+docker build kafka/ -t kafka:latest
 ```
 
 then, you have to run the following command:
 
 ```
-docker build logstash/ -t logstash
+docker build logstash/ -t logstash:latest
 ```
 
-then, you have to run the following command:
+## How to run the code
 
 ```
 dokcer-compose up
 ```
-
-## How to run the code
 
 after every container is up and running, you have to run the following command:
 

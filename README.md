@@ -5,7 +5,11 @@ to run this code, you need to install the following packages:
 ```
 pip install elasitcsearch
 pip install __future__
-pip install pandas
+pip install requests
+pip install json
+pip install argparse
+pip install InstalledAppFlow
+pip install google_auth_oauthlib
 ```
 
 you have to download kafka.tgz from the following link: https://www.apache.org/dyn/closer.cgi?path=/kafka/3.4.0/kafka_2.13-3.4.0.tgz

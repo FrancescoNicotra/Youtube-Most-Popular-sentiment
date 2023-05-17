@@ -12,24 +12,15 @@ from googleapiclient.errors import HttpError
 from google_auth_oauthlib.flow import InstalledAppFlow
 
 
-# The CLIENT_SECRETS_FILE variable specifies the name of a file that contains
-# the OAuth 2.0 information for this application, including its client_id and
-# client_secret. You can acquire an OAuth 2.0 client ID and client secret from
-# the {{ Google Cloud Console }} at
-# {{ https://cloud.google.com/console }}.
-# Please ensure that you have enabled the YouTube Data API for your project.
-# For more information about using OAuth2 to access the YouTube Data API, see:
-#   https://developers.google.com/youtube/v3/guides/authentication
-# For more information about the client_secrets.json file format, see:
-#   https://developers.google.com/api-client-library/python/guide/aaa_client_secrets
-CLIENT_SECRETS_FILE = 'client_secret_662717540184-9j4cp6ln4glhmj2aou93c9s5th0iju4a.apps.googleusercontent.com.json'
+load_dotenv('.env')
+CLIENT_SECRETS_FILE = os.getenv('CLIENT')
 
 # This OAuth 2.0 access scope allows for read-only access to the authenticated
 # user's account, but not other types of account access.
 SCOPES = ['https://www.googleapis.com/auth/youtube.readonly']
 API_SERVICE_NAME = 'youtube'
 API_VERSION = 'v3'
-DEVELOPER_KEY = "AIzaSyAXeARoQ62y5gSM6gFK4geGNQN2eGP1P7c"
+DEVELOPER_KEY = os.getenv('API_KEY')
 
 VALID_BROADCAST_STATUSES = ('all', 'active', 'completed', 'upcoming',)
 

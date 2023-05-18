@@ -10,6 +10,7 @@ import google_auth_oauthlib.flow
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from google_auth_oauthlib.flow import InstalledAppFlow
+import uuid
 
 
 load_dotenv('.env')
@@ -66,8 +67,8 @@ def list_trending_videos(youtube):
         video_item = {
             'title': video['title'],
             'videoId': video_id,
-            'views': video_statistics.get('viewCount', 0),
-            'comments': []
+            'views': int(video_statistics.get('viewCount', 0)),
+            'doc_id': str(uuid.uuid4().int)  # Genera un UUID intero univoco
         }
 
         request = youtubeAPI.commentThreads().list(
@@ -77,9 +78,9 @@ def list_trending_videos(youtube):
         )
         response = request.execute()
 
-        for comment_thread in response.get('items', []):
-            comment = comment_thread['snippet']['topLevelComment']['snippet']
-            video_item['comments'].append(comment['textDisplay'])
+        # for comment_thread in response.get('items', []):
+        #   comment = comment_thread['snippet']['topLevelComment']['snippet']
+        #  video_item['comments'].append(comment['textDisplay'])
 
         videos.append(video_item)
 

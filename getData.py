@@ -12,7 +12,6 @@ from googleapiclient.errors import HttpError
 from google_auth_oauthlib.flow import InstalledAppFlow
 import uuid
 
-
 load_dotenv('.env')
 CLIENT_SECRETS_FILE = os.getenv('CLIENT')
 
@@ -25,9 +24,8 @@ DEVELOPER_KEY = os.getenv('API_KEY')
 
 VALID_BROADCAST_STATUSES = ('all', 'active', 'completed', 'upcoming',)
 
+
 # Authorize the request and store authorization credentials.
-
-
 def get_authenticated_service():
     flow = InstalledAppFlow.from_client_secrets_file(
         CLIENT_SECRETS_FILE, SCOPES)
@@ -43,8 +41,7 @@ def send_to_logstash(data):
         if response.status_code == 200:
             print("Dati inviati a Logstash con successo.")
         else:
-            print("Errore durante l'invio dei dati a Logstash. Codice di risposta:",
-                  response.status_code)
+            print("Errore durante l'invio dei dati a Logstash. Codice di risposta:", response.status_code)
     except requests.exceptions.RequestException as e:
         print("Errore durante l'invio dei dati a Logstash:", str(e))
 
@@ -52,37 +49,41 @@ def send_to_logstash(data):
 def list_trending_videos(youtube):
     videos = []
 
-    youtubeAPI = googleapiclient.discovery.build(
-        API_SERVICE_NAME, API_VERSION, developerKey=DEVELOPER_KEY)
-    search_response = youtube.videos().list(
-        part='snippet,statistics',
-        chart='mostPopular',
-        maxResults=15
-    ).execute()
+    youtubeAPI = googleapiclient.discovery.build(API_SERVICE_NAME, API_VERSION, developerKey=DEVELOPER_KEY)
+    region_codes = ['US', 'IT']  # Codici di regione per gli Stati Uniti e l'Italia
 
-    for item in search_response.get('items', []):
-        video = item['snippet']
-        video_id = item['id']
-        video_statistics = item.get('statistics', {})
-        video_item = {
-            'title': video['title'],
-            'videoId': video_id,
-            'views': int(video_statistics.get('viewCount', 0)),
-            'doc_id': str(uuid.uuid4().int)  # Genera un UUID intero univoco
-        }
+    for region_code in region_codes:
+        search_response = youtube.videos().list(
+            part='snippet,statistics',
+            chart='mostPopular',
+            regionCode=region_code,
+            maxResults=15
+        ).execute()
 
-        request = youtubeAPI.commentThreads().list(
-            part="snippet",
-            videoId=video_id,
-            maxResults=100
-        )
-        response = request.execute()
+        for item in search_response.get('items', []):
+            video = item['snippet']
+            video_id = item['id']
+            video_statistics = item.get('statistics', {})
+            video_item = {
+                'title': video['title'],
+                'videoId': video_id,
+                'views': int(video_statistics.get('viewCount', 0)),
+                'doc_id': str(uuid.uuid4().int),  # Genera un UUID intero univoco
+                'region': region_code  # Aggiunge il codice di regione al JSON
+            }
 
-        # for comment_thread in response.get('items', []):
-        #   comment = comment_thread['snippet']['topLevelComment']['snippet']
-        #  video_item['comments'].append(comment['textDisplay'])
+            request = youtubeAPI.commentThreads().list(
+                part="snippet",
+                videoId=video_id,
+                maxResults=100
+            )
+            response = request.execute()
 
-        videos.append(video_item)
+            # for comment_thread in response.get('items', []):
+            #   comment = comment_thread['snippet']['topLevelComment']['snippet']
+            #  video_item['comments'].append(comment['textDisplay'])
+
+            videos.append(video_item)
 
     formatted_json = json.dumps(videos, indent=4)
     print(formatted_json)
@@ -90,8 +91,7 @@ def list_trending_videos(youtube):
     # Invia i dati a Logstash tramite una richiesta POST
     logstash_url = 'http://localhost:9090'
     headers = {'Content-Type': 'application/json'}
-    response = requests.post(
-        logstash_url, data=formatted_json, headers=headers)
+    response = requests.post(logstash_url, data=formatted_json, headers=headers)
 
     if response.status_code == 200:
         print('Dati inviati con successo a Logstash.')

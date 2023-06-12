@@ -1,5 +1,5 @@
 FROM amazoncorretto:17
-LABEL maintainer="Salvo Nicotra"
+LABEL maintainer="Francesco Nicota"
 ENV PATH /opt/kafka/bin:$PATH
 ENV KAFKA_DIR "/opt/kafka"
 ARG KAFKA_VERSION="2.13-3.4.0"

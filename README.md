@@ -15,13 +15,13 @@ you have to download kafka.tgz from the following link: <a href="https://www.apa
 then, you have to save it in setup folder and run the following command:
 
 ```
-docker build kafka/ -t kafka:latest
+docker build kafka/ -t youtap:kafka
 ```
 
 then, you have to run the following command:
 
 ```
-docker build logstash/ -t logstash:latest
+docker build logstash/ -t youtap:logstash
 ```
 
 ## How to run the code

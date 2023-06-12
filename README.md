@@ -26,6 +26,15 @@ docker build logstash/ -t youtap:logstash
 
 ## How to run the code
 
+If you want to use Jupyter, you can run this command:
+
+```
+jupyter notebook presentazione.ipynb
+```
+
+and then follow the steps of the presentation.
+Alternatively, you can execute the following commands.
+
 ```
 dokcer-compose up
 ```
@@ -43,3 +52,9 @@ python3 getData.py
 ```
 
 Once the script has finished, you can go to the following link to view the graphs on Kibana: <a href="http://localhost:5601/app/dashboards#/view/c2e910b0-0903-11ee-8d24-1b3026e98ad5?_g=(filters:!(),refreshInterval:(pause:!t,value:60000),time:(from:now-15m,to:now))"> Dashboard Kibana </a>
+
+## How to stop the code
+
+```
+docker-compose down
+```

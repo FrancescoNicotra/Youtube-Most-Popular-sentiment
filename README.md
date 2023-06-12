@@ -2,7 +2,7 @@
 
 ## Introduction
 
-Before you can run this code, you will need an .env file where you should place the Google API key. The file should look like this:
+Before you can run this code, you will need to create an .env file in the root project folder where you should insert the Google API key. The file should look like this:
 
 ```
 API_KEY=Your_api_key

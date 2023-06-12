@@ -1,6 +1,14 @@
 # YouTap
 
-to run this code, you need to install the following packages:
+## Introduction
+
+Before you can run this code, you will need an .env file where you should place the Google API key. The file should look like this:
+
+```
+API_KEY=Your_api_key
+```
+
+then, you need to install the following packages:
 
 ```
 pip install argparse

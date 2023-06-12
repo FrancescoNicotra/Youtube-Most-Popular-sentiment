@@ -1,4 +1,4 @@
-version: "3.7"
+version: "3.8"
 services:
   zookeeper:
     image: youtap:kafka
@@ -26,25 +26,25 @@ services:
     container_name: kafkaTopic
     environment:
       - KAFKA_ACTION=create-topic
-      - KAFKA_PARTITION=3
+      - KAFKA_PARTITION=1
       - KAFKA_TOPIC=youtap
     networks:
       youtap:
     depends_on:
       - zookeeper
       - kafkaserver
-  kafka-ui:
-    image: provectuslabs/kafka-ui:latest
-    container_name: kafkaWebUI
-    environment:
-      - KAFKA_CLUSTERS_0_NAME=local
-      - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=kafkaServer:9092
-    ports:
-      - 9292:8080
-    networks:
-      - youtap
-    depends_on:
-      - kafkaserver
+  # kafka-ui:
+  #   image: provectuslabs/kafka-ui:latest
+  #   container_name: kafkaWebUI
+  #   environment:
+  #     - KAFKA_CLUSTERS_0_NAME=local
+  #     - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=kafkaServer:9092
+  #   ports:
+  #     - 8080:8080
+  #   networks:
+  #     - youtap
+  #   depends_on:
+  #     - kafkaserver
   logstash:
     image: youtap:logstash
     networks:
@@ -54,7 +54,7 @@ services:
     ports:
       - 9090:9090
     volumes:
-      - ./quovado.conf:/usr/share/logstash/pipeline/logstash.conf
+      - ./youtap.conf:/usr/share/logstash/pipeline/logstash.conf
     depends_on:
       kafkaTopic:
         condition: service_completed_successfully
@@ -70,11 +70,6 @@ services:
     depends_on:
       kafkaTopic:
         condition: service_completed_successfully
-  spark:
-    build: ./spark/
-    networks:
-      - youtap
-    container_name: spark
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.7.1-arm64
     container_name: elasticsearch
@@ -104,6 +99,16 @@ services:
       - youtap
     depends_on:
       - elasticsearch
+  spark:
+    image: youtap:spark
+    volumes:
+      - ./spark/spark.py:/home/spark.py
+    networks:
+      - youtap
+    container_name: spark
+    depends_on:
+      - elasticsearch
+    restart: on-failure
 networks:
   youtap:
     name: youtap

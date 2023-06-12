@@ -7,14 +7,13 @@ FROM openjdk:${OPENJDK_VERSION}-${IMAGE_VARIANT}
 
 COPY --from=py3 / /
 
+ADD training_set_sentipolc16.csv /home/
+
 ARG PYSPARK_VERSION=3.4.0
 RUN pip --no-cache-dir install pyspark==${PYSPARK_VERSION}
-RUN pip --no-cache-dir install elasticsearch
+RUN pip --no-cache-dir install elasticsearch numpy
 
+WORKDIR /home
 
+CMD spark-submit --master local[1] --packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.0.1,org.elasticsearch:elasticsearch-spark-20_2.12:7.15.1 spark.py
 
-# COPY requirements.txt .
-# RUN pip3 install -r requirements.txt
-
-COPY spark.py .
-CMD spark-submit --master local[1] --packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.4.0 spark.py 

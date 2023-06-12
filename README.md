@@ -30,10 +30,16 @@ docker build logstash/ -t youtap:logstash
 dokcer-compose up
 ```
 
+or
+
+```
+docker-compose up -d
+```
+
 after every container is up and running, you have to run the following command:
 
 ```
 python3 getData.py
 ```
 
-Now on: http://localhost:9292/ you can see the dashboard and on topics section you will see your data
+Once the script has finished, you can go to the following link to view the graphs on Kibana: <a href="http://localhost:5601/app/dashboards#/view/c2e910b0-0903-11ee-8d24-1b3026e98ad5?_g=(filters:!(),refreshInterval:(pause:!t,value:60000),time:(from:now-15m,to:now))"> Dashboard Kibana </a>

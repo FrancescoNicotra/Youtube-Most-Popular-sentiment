@@ -34,7 +34,7 @@ jupyter notebook presentazione.ipynb
 
 and then follow the steps of the presentation.
 
-#Alternatively, you can execute the following commands.
+## Alternatively, you can execute the following commands.
 
 ```
 dokcer-compose up

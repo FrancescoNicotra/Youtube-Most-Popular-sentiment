@@ -18,7 +18,7 @@ pip install requests
 
 ```
 
-<img src="https://github.com/FrancescoNicotra/Youtube-Most-Popular-sentiment/blob/main/Path.png" width="500" height="500">
+<img src="https://github.com/FrancescoNicotra/Youtube-Most-Popular-sentiment/blob/main/Path.png" width="800" height="500">
 
 you have to download kafka.tgz from the following link: <a href="https://www.apache.org/dyn/closer.cgi?path=/kafka/3.4.0/kafka_2.13-3.4.0.tgz">kafka.tgz</a>
 

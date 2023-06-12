@@ -33,6 +33,7 @@ jupyter notebook presentazione.ipynb
 ```
 
 and then follow the steps of the presentation.
+<br/> --- <br/>
 Alternatively, you can execute the following commands.
 
 ```

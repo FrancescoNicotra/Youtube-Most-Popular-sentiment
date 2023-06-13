@@ -13,7 +13,6 @@ services:
     container_name: kafkaServer
     environment:
       - KAFKA_ACTION=start-kafka
-      #- KAFKA_HEAP_OPTS=-Xmx256M
     ports:
       - 9092:9092
     networks:
@@ -116,4 +115,3 @@ networks:
     ipam:
       config:
         - subnet: 10.0.100.1/24
-#     export KAFKA_HEAP_OPTS="-Xmx1G -Xms1G"
